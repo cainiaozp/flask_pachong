@@ -1,0 +1,52 @@
+import logging, os#导入两个包
+
+from queue import Queue#导入包
+queue = Queue()
+queue_page = Queue()#创建两个队列，用于存放需要爬取的网页链接
+
+jiaXingUrl = "https://www.jxrsrc.com/job?page={_page}"#定义要爬取的网站的URL
+
+headers = {
+  'accept': '*/*',
+  'accept-language': 'zh-CN,zh;q=0.9,zh-TW;q=0.8,en-US;q=0.7,en;q=0.6',
+  'cache-control': 'no-cache',
+  'pragma': 'no-cache',
+}#设置请求头信息
+LIMIT = 100
+GOODMAXCOUNTUNDERCATEGORY = 500
+# 数据库账户配置
+USERNAME = 'root'#用户名
+PASSWORD = '123456'#密码
+
+# 1、创建日志收集器
+log = logging.getLogger(name="rose_logger")
+
+# 2、创建日志收集渠道
+# 输出控制台
+pycharm = logging.StreamHandler()
+# 输出文件夹
+file = logging.FileHandler(os.getcwd() + r"\rose.log", encoding="utf-8")
+# file = handlers.TimedRotatingFileHandler(filename="test.log",when="D",interval=1,backupCount=10,encoding="utf-8")
+
+# 3、创建日志的输出格式
+fmt1 = "%(asctime)s - [%(funcName)s-->line:%(lineno)d] - %(levelname)s:%(message)s"
+# 创建一个日志输出对象
+pycharm_fmt = logging.Formatter(fmt=fmt1)
+# 创建日志的输出格式
+fmt2 = '[%(asctime)s-%(name)s-%(levelname)s-%(filename)s-%(lineno)d]:%(message)s'
+pycharm_fmt1 = logging.Formatter(fmt=fmt2)
+
+# 4、日志输出格式绑定到日志输出渠道
+pycharm.setFormatter(fmt=pycharm_fmt)
+file.setFormatter(fmt=pycharm_fmt1)
+
+# 5、直接给收集器设置日志级别就可以了，渠道会继承收集器的日志级别
+log.setLevel(level=logging.DEBUG)
+# 5、给收集渠道设置日志级别，文件渠道，控制台输出的级别不会一样
+pycharm.setLevel(logging.DEBUG)
+
+# 6、将日志收集渠道绑定到日志收集器
+log.addHandler(pycharm)
+log.addHandler(file)
+
+log.info(msg="测试")
